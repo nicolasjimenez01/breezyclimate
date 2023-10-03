@@ -10,11 +10,12 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ( { children } ) => {
   return (
     <div style={{
-      backgroundImage: "url(../../public/Logo4.png)",
-      backgroundSize: "cover",
-      minHeight: "100vh",
+      backgroundImage: "url(/Logo4.png)",
+      backgroundSize: "contain",
+      // minHeight: "100vh",
       zIndex: 1
     }}>
+      
       <div className="flex h-screen">
         <MultiLevelSidebar />
           <div className="flex-1 flex flex-col overflow-hidden">

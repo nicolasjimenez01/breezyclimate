@@ -65,13 +65,13 @@ export default function MultiLevelSidebar() {
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                <Link href='/pedidos/reclamina'>Ductos Rectangular en Lamina</Link>
+                <Link href='/pedidos/reclamina'>Ductos Rectangular en Lámina</Link>
               </ListItem>
               <ListItem className="hover:bg-gray-700">
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                <Link href='/pedidos/reclamina'>Ductos Circular en Lamina</Link>
+                <Link href='/pedidos/reclamina'>Ductos Circular en Lámina</Link>
               </ListItem>
               <ListItem className="hover:bg-gray-700">
                 <ListItemPrefix>

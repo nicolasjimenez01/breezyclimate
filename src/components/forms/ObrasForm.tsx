@@ -134,7 +134,7 @@ export default function ObrasForm() {
 
           {isSubmitting && <LinearProgress />}
           <br />
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             disabled={isSubmitting}
@@ -142,7 +142,14 @@ export default function ObrasForm() {
             sx={{mt:2}}
           >
             Submit
-          </Button>
+          </Button> */}
+                  
+            <button className="bg-menta hover:bg-mentaHover text-white color-white font-bold py-2 px-4 rounded w-40 text-xl mt-10" 
+            disabled={isSubmitting}
+            onClick={submitForm}
+            >
+            Guardar
+            </button>
         </Form>
       )}
     </Formik>

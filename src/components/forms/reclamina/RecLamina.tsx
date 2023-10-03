@@ -7,7 +7,9 @@ import Box from '@mui/material/Box';
 import { Text } from '@chakra-ui/react';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import { useMedidaMayorA, useMedidaMenorA, useResultado } from './operations';
+import { useMedidaMayorA, useMedidaMenorA, usePromMedA, useMedidaMayorB, useMedidaMenorB, usePromMedB, usePromedioPerimetro, useCantPiezas, useLongitud, useArea, useCantSoportes, useDistSoportes } from './operations';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Values {
   email: string;
@@ -36,7 +38,51 @@ interface Values {
 export default function RecLaminaForm() {
   const [inputMedidaMayorA, setInputMedidaMayorA] = useMedidaMayorA();
   const [inputMedidaMenorA, setInputMedidaMenorA] = useMedidaMenorA();
-  const resultado = useResultado();
+  const resultPromMedA = usePromMedA();
+
+  const [inputMedidaMayorB, setInputMedidaMayorB] = useMedidaMayorB();
+  const [inputMedidaMenorB, setInputMedidaMenorB] = useMedidaMenorB();
+  const resultPromMedB = usePromMedB();
+
+  const resultPerimetro = usePromedioPerimetro();
+
+  const [inputLongitud, setInputLongitud] = useLongitud();
+
+  
+  const resultCantPiezas = useCantPiezas();
+
+  const resultArea = useArea();
+
+  const [inputDistSoportes, setInputDistSoportes] = useDistSoportes()
+  const resultCantSoportes = useCantSoportes();
+
+  const router = useRouter()
+
+  const handleSubmit = (values: Values, { setSubmitting }: any) => {
+
+    router.push('/pedidos/reclamina/insertar');
+
+    setSubmitting(false);
+  };
+
+  useEffect(() => {
+    // Evitar llamadas innecesarias a setInputMedidaMayorA y setInputMedidaMenorA
+    // que podrían causar un bucle infinito
+    setInputMedidaMayorA((prevInputMedidaMayorA) => {
+      if (prevInputMedidaMayorA !== inputMedidaMayorA) {
+        return inputMedidaMayorA;
+      }
+      return prevInputMedidaMayorA;
+    });
+
+    setInputMedidaMenorA((prevInputMedidaMenorA) => {
+      if (prevInputMedidaMenorA !== inputMedidaMenorA) {
+        return inputMedidaMenorA;
+      }
+      return prevInputMedidaMenorA;
+    });
+  }, [inputMedidaMayorA, inputMedidaMenorA, setInputMedidaMayorA, setInputMedidaMenorA]);
+
   return (
     <Formik
       initialValues={{
@@ -92,11 +138,18 @@ export default function RecLaminaForm() {
                   type="number"
                   pattern="[0-9]*"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (e && e.target) {
-                      setInputMedidaMayorA(parseFloat(e.target.value));
-                      console.log(e.target.value)
-                    }}}
-                  value={inputMedidaMayorA}
+                    const inputValue = e.target.value.trim();
+
+                    if (inputValue === '') {
+                      setInputMedidaMayorA(null as null); // Usa el operador 'as' para castear a null
+                    } else {
+                      const numericValue = parseFloat(inputValue);
+                      if (!isNaN(numericValue)) {
+                        setInputMedidaMayorA(numericValue as unknown as null); // Usa el operador 'as' para castear a null
+                      }
+                    }
+                    }}
+                  value={inputMedidaMayorA || ''}
                 />
               
               <Field
@@ -106,11 +159,16 @@ export default function RecLaminaForm() {
                 type="number"
                 pattern="[0-9]*"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e && e.target) {
-                    setInputMedidaMenorA(parseFloat(e.target.value));
-                    console.log(e.target.value)
-                  }}}
-                value={inputMedidaMenorA}
+                  const inputValue = e.target.value.trim();
+
+                  if (inputValue === '') {
+                    setInputMedidaMenorA(null as unknown as null);
+                  } else {
+                    const numericValue = parseFloat(inputValue);
+                    if (!isNaN(numericValue)) {
+                      setInputMedidaMenorA(numericValue as unknown as null);
+                    }}}}
+                value={inputMedidaMenorA || ''}
               />
 
               <br/>
@@ -122,6 +180,19 @@ export default function RecLaminaForm() {
                 sx={{mt:2, mr:4}}
                 type="number"
                 pattern="[0-9]*"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const inputValue = e.target.value.trim();
+
+                  if (inputValue === '') {
+                    setInputMedidaMayorB(null as null); // Usa el operador 'as' para castear a null
+                  } else {
+                    const numericValue = parseFloat(inputValue);
+                    if (!isNaN(numericValue)) {
+                      setInputMedidaMayorB(numericValue as unknown as null); // Usa el operador 'as' para castear a null
+                    }
+                  }
+                  }}
+                value={inputMedidaMayorB || ''}
               />
 
               <Field 
@@ -131,6 +202,17 @@ export default function RecLaminaForm() {
                 sx={{mt:2}}
                 type="number"
                 pattern="[0-9]*"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const inputValue = e.target.value.trim();
+
+                  if (inputValue === '') {
+                    setInputMedidaMenorB(null as unknown as null);
+                  } else {
+                    const numericValue = parseFloat(inputValue);
+                    if (!isNaN(numericValue)) {
+                      setInputMedidaMenorB(numericValue as unknown as null);
+                    }}}}
+                value={inputMedidaMenorB || ''}
               />
 
               <br/>
@@ -142,6 +224,19 @@ export default function RecLaminaForm() {
                 sx={{mt:2, mr:4}}
                 type="number"
                 pattern="[0-9]*"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const inputValue = e.target.value.trim();
+
+                  if (inputValue === '') {
+                    setInputLongitud(null as null); // Usa el operador 'as' para castear a null
+                  } else {
+                    const numericValue = parseFloat(inputValue);
+                    if (!isNaN(numericValue)) {
+                      setInputLongitud(numericValue as unknown as null); // Usa el operador 'as' para castear a null
+                    }
+                  }
+                  }}
+                value={inputLongitud || ''}
               />
 
               <br/>
@@ -153,6 +248,19 @@ export default function RecLaminaForm() {
                 sx={{mt:2, mr: 4}}
                 type="number"
                 pattern="[0-9]*"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const inputValue = e.target.value.trim();
+
+                  if (inputValue === '') {
+                    setInputDistSoportes(null as null); // Usa el operador 'as' para castear a null
+                  } else {
+                    const numericValue = parseFloat(inputValue);
+                    if (!isNaN(numericValue)) {
+                      setInputDistSoportes(numericValue as unknown as null); // Usa el operador 'as' para castear a null
+                    }
+                  }
+                  }}
+                value={inputDistSoportes || ''}
               />
 
               <Field 
@@ -211,7 +319,7 @@ export default function RecLaminaForm() {
               <div className="flex-2 ml-4 bg-grey p-2 rounded-lg">
               <div className='flex tems-center justify-center'>
               <Typography align="center">
-                Medidas Cálculadas por <br/> el sistema
+                Medidas calculadas por <br/> el sistema
               </Typography>
               </div>
               <Field 
@@ -221,7 +329,7 @@ export default function RecLaminaForm() {
                 // default value="0.00"
                 InputProps={{readOnly: true,}}
                 sx={{mt:2}}
-                value={resultado}
+                value={resultPromMedA}
               />
 
               <br/>
@@ -233,6 +341,7 @@ export default function RecLaminaForm() {
                 default value="0.00"
                 InputProps={{readOnly: true,}}
                 sx={{mt:2}}
+                value={resultPromMedB}
               />
 
               <br/>
@@ -244,6 +353,7 @@ export default function RecLaminaForm() {
                 default value="0.00"
                 InputProps={{readOnly: true,}}
                 sx={{mt:2}}
+                value={resultCantPiezas}
               />
 
               <br/>
@@ -255,6 +365,7 @@ export default function RecLaminaForm() {
                 default value="0.00"
                 InputProps={{readOnly: true,}}
                 sx={{mt:2, mr: 2}}
+                value={resultCantSoportes}
               />
 
               <br/>
@@ -266,6 +377,7 @@ export default function RecLaminaForm() {
                 default value="0.00"
                 InputProps={{readOnly: true,}}
                 sx={{mt:2}}
+                value={resultPerimetro}
               />
               
               <br/>
@@ -277,13 +389,14 @@ export default function RecLaminaForm() {
                 default value="0.00"
                 InputProps={{readOnly: true,}}
                 sx={{mt:2}}
+                value={resultArea}
               />
             </div>
           </div>
 
           {isSubmitting && <LinearProgress />}
           <br />
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             disabled={isSubmitting}
@@ -291,10 +404,12 @@ export default function RecLaminaForm() {
             sx={{mt:2}}
           >
             Submit
-          </Button>
-          <Link href='/obras/insert'>
-            <button className="bg-menta hover:bg-mentaHover text-white color-white font-bold py-2 px-4 rounded w-40 text-xl">
-            Insertar
+          </Button> */}
+          <Link href='/pedidos/reclamina/insertar/insertar2'>
+            <button className="bg-menta hover:bg-mentaHover text-white color-white font-bold py-2 px-4 rounded w-40 text-xl"             disabled={isSubmitting}
+            onClick={submitForm}
+            >
+            Continuar
             </button>
           </Link>
         </Form>
