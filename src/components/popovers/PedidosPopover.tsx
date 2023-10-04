@@ -47,6 +47,25 @@ const DialogWithForm = () => {
 
   const router = useRouter()
 
+  const customSvg = (<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M9.55718 21.5574H4.75717C3.43168 21.5574 2.35717 20.4828 2.35718 19.1574L2.35727 4.75741C2.35728 3.43193 3.43179 2.35742 4.75727 2.35742H15.5575C16.883 2.35742 17.9575 3.43194 17.9575 4.75742V9.55742M6.55755 7.15742H13.7576M6.55755 10.7574H13.7576M6.55755 14.3574H10.1576M13.1574 18.2484L18.2485 13.1573L21.6427 16.5514L16.5515 21.6426H13.1574V18.2484Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>)
+
+  const footerSvg = (            <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    className="h-4 w-4"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+    />
+  </svg>)
+
   const handleSubmit = (values: Values, { setSubmitting }: any) => {
     const codigoIngresado = values.codObra;
     const codigoExiste = codigosDeObra.includes(codigoIngresado);
@@ -64,7 +83,7 @@ const DialogWithForm = () => {
   return (
     <>
       <div>
-      <CardWithLink title="Insertar" text="Aquí puedes insertar un nuevo pedido para una obra" accion="Insertar pedido" onClick={handleOpen}/>
+      <CardWithLink title="Insertar" text="Aquí puedes insertar un nuevo pedido para una obra" onClick={handleOpen} svg={customSvg} footerSvg={footerSvg}/>
       </div>
       <div>
       <Modal
@@ -123,9 +142,7 @@ const DialogWithForm = () => {
           </Box>
         </Fade>
       </Modal>
-    </div>
-    
-
+      </div>
     </>
   );
 }
