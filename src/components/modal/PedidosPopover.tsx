@@ -16,6 +16,11 @@ interface Values {
   codObra: string;
 }
 
+interface Modal {
+  isOpen: boolean
+  onClose: () => void;
+}
+
 const style = {
   display: 'flex',
   flexDirection: 'column',
@@ -40,10 +45,7 @@ const codigosDeObra = [
   '125',
 ]
  
-const DialogWithForm = () => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+const DialogWithForm = ({ isOpen, onClose }: Modal) => {
 
   const router = useRouter()
 
@@ -71,7 +73,7 @@ const DialogWithForm = () => {
     const codigoExiste = codigosDeObra.includes(codigoIngresado);
 
     if (codigoExiste) {
-      router.push('/pedidos/reclamina/insertar');
+      router.push('/pedidos/crear/reclamina/insertar');
     } else {
       toast.error('El código de obra no existe', {position: 'top-center',});
     }
@@ -83,14 +85,11 @@ const DialogWithForm = () => {
   return (
     <>
       <div>
-      <CardWithLink title="Insertar" text="Aquí puedes insertar un nuevo pedido para una obra" onClick={handleOpen} svg={customSvg} footerSvg={footerSvg}/>
-      </div>
-      <div>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={isOpen}
+        onClose={onClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -99,7 +98,7 @@ const DialogWithForm = () => {
           },
         }}
       >
-        <Fade in={open}>
+        {/* <Fade in={open}> */}
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2" className='mb-3'>
               Ingresa el código de obra
@@ -140,7 +139,7 @@ const DialogWithForm = () => {
           </Formik>
             </div>
           </Box>
-        </Fade>
+        {/* </Fade> */}
       </Modal>
       </div>
     </>

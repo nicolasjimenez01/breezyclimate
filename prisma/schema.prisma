@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Obra {
+  id           Int      @id @default(autoincrement())
+  nomObra      String
+  nomOficial   String
+  celOficial   String
+  contactoObra String
+  celContacto  String
+  ciudad       String
+  direccion    String
+  fecha        DateTime
+  pedidos      PedidoRecLamina[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model PedidoRecLamina {
+  id Int @id @default(autoincrement())
+  medidaMayorA Float
+  medidaMenorA Float
+  medidaMayorB Float
+  medidaMenorB Float
+  promMedA Float
+  promMedB Float
+  longitudDuctos Float
+  cantPiezas Int
+  distSoportes Float
+  longSoportes Float
+  cantSoportes Int
+  perimetro Float
+  areaM2 Float
+  rejillasDifusores Int
+  tieRoad Float
+  ciudad String
+  direccion String
+  fecha DateTime
+  obra  Obra    @relation(fields: [obraId], references: [id], onDelete: Cascade)
+  obraId           Int
+  pedidoInsumos    PedidoInsumo[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Insumo {
+  id        Int      @id @default(autoincrement())
+  nomInsumo String
+  proveedor String
+  cantStock Int
+  precio    Float
+  pedidoInsumos PedidoInsumo[] 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PedidoInsumo {
+  id        Int      @id @default(autoincrement())
+  cantidad  Int
+  total    Float
+  pedido    PedidoRecLamina   @relation(fields: [pedidoId], references: [id])
+  pedidoId Int
+  insumo    Insumo   @relation(fields: [insumoId], references: [id])
+  insumoId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

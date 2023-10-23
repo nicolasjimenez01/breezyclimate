@@ -1,4 +1,4 @@
-import ObrasForm from "@/components/forms/ObrasForm"
+import ObrasForm from "@/components/forms/obras/ObrasForm"
 
 export default function Form() {
   return (

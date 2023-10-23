@@ -2,30 +2,28 @@
 import { Button, LinearProgress } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { Text } from '@chakra-ui/react';
+import  React from 'react';
+import { useRouter } from 'next/navigation';
+import { formatRFC3339 } from 'date-fns'
+import { NextResponse } from "next/server";
+import { toast } from 'sonner';
+import { useObrasStore } from '@/context/ObrasContext';
 
-interface Values {
-  email: string;
-  password: string;
-  codObra: string;
-  nomObra: string;
-  nomOficial: string;
-  celOficial: string;
-  contactoObra: string;
-  celContacto: string;
-  ciudad: string;
-  dirección: string;
-  fecha: Date;
-}
+function ObrasForm() {
 
-export default function ObrasForm() {
+  const [ 
+    createObra, 
+    selectedObra 
+  ] = useObrasStore(state => [
+    state.createObra, 
+    state.selectedObra
+  ])
+  
+  const router = useRouter()
+
   return (
     <Formik
       initialValues={{
-        email: '',
-        password: '',
         codObra: '',
         nomObra: '',
         nomOficial: '',
@@ -33,38 +31,46 @@ export default function ObrasForm() {
         contactoObra: '',
         celContacto: '',
         ciudad: '',
-        dirección: '',
+        direccion: '',
         fecha: new Date(),
-        
       }}
-      validate={(values) => {
-        const errors: Partial<Values> = {};
-        if (!values.email) {
-          errors.email = 'Required';
-        } else if (
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-        ) {
-          errors.email = 'Invalid email address';
-        }
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
+      // validate={(values) => {
+      //   const errors: Partial<Values> = {};
+      //   if (!values.email) {
+      //     errors.email = 'Required';
+      //   } else if (
+      //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      //   ) {
+      //     errors.email = 'Invalid email address';
+      //   }
+      //   return errors;
+      // }}
+      onSubmit={async (e, { setSubmitting }) => {
+        try {
+          const fechaFormat = formatRFC3339(new Date(e.fecha), { fractionDigits: 3 })
+          await createObra({
+            ...e,
+            fecha: new Date(fechaFormat), 
+            
+          });
+          toast.success('Obra creada');
+          await new Promise((resolve) => setTimeout(resolve, 2000))
+          router.push('/obras')
+        } catch (error) {
+          if(error instanceof Error){
+            return NextResponse.json({
+              message: error.message
+            }, {
+              status: 500
+            })
+          }
+        }finally {
           setSubmitting(false);
-          alert(JSON.stringify(values, null, 2));
-        }, 500);
+        }
       }}
     >
       {({ submitForm, isSubmitting }) => (
         <Form>
-            <Field
-              component={TextField}
-              name="codObra"
-              label="Código Obra"
-              sx={{mr: 4}}
-              style={{width:320}}
-            />
-          
           <Field
             component={TextField}
             label="Nombre Obra"
@@ -134,15 +140,6 @@ export default function ObrasForm() {
 
           {isSubmitting && <LinearProgress />}
           <br />
-          {/* <Button
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-            onClick={submitForm}
-            sx={{mt:2}}
-          >
-            Submit
-          </Button> */}
                   
             <button className="bg-menta hover:bg-mentaHover text-white color-white font-bold py-2 px-4 rounded w-40 text-xl mt-10" 
             disabled={isSubmitting}
@@ -155,3 +152,5 @@ export default function ObrasForm() {
     </Formik>
   );
 }
+
+export default ObrasForm

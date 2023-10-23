@@ -8,6 +8,128 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useContext, useEffect } from 'react'
+import { useObrasStore } from '@/context/ObrasContext';
+import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Stack from '@mui/material/Stack';
+import DeleteDialog from "@/components/modal/ConfirmDelete";
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Obra } from '@prisma/client';
+import { format } from 'date-fns'
+
+
+async function findObra(id: number): Promise<Obra>{
+  const res = await fetch('http://localhost:3000/api/obras/' + id)
+  const obra: Obra = await res.json()
+  return obra
+}
+
+function ObrasTable() {
+
+  const [
+    obras, 
+    getObras, 
+    deleteObra, 
+    setSelectedObra
+  ] = useObrasStore(state => [
+    state.obras,
+    state.getObras,
+    state.deleteObra,
+    state.setSelectedObra
+  ])
+
+  const [open, setOpen] = React.useState(false);
+  const [obra, setObra] = React.useState<Obra | undefined>(undefined);
+
+  const router = useRouter()
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleEliminar = async (id: number) => {
+    await deleteObra(id)
+    toast.success('Se ha eliminado la obra correctamente')
+    handleClose()
+  };
+
+  const handleEditar = async (id: number) => {
+    const obraData = await findObra(id)
+    setObra(obraData);
+    router.push( `/obras/edit/${id}`);
+  };
+
+
+  useEffect(() => {
+    getObras()
+  }, [getObras])
+  
+  return (
+    <>
+    <TableContainer component={Paper} sx={{ mt: 0}}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell align="center" sx={{ width: 50 }}>Código de obra</StyledTableCell>
+            <StyledTableCell align="center">Nombre de la obra</StyledTableCell>
+            <StyledTableCell align="center">Nombre del oficial</StyledTableCell>
+            <StyledTableCell align="center">Celular oficial</StyledTableCell>
+            <StyledTableCell align="center">CTO OBRA</StyledTableCell>
+            <StyledTableCell align="center">Ciudad</StyledTableCell>
+            <StyledTableCell align="center">Celular CTO</StyledTableCell>
+            <StyledTableCell align="center">Fecha</StyledTableCell>
+            <StyledTableCell align="center">Acciones</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {obras.map((row) => (
+            <StyledTableRow key={row.id}>
+              <StyledTableCell component="th" scope="row">
+                {row.id}
+              </StyledTableCell>
+              <StyledTableCell align="center">{row.nomObra}</StyledTableCell>
+              <StyledTableCell align="center">{row.nomOficial}</StyledTableCell>
+              <StyledTableCell align="center">{row.celOficial}</StyledTableCell>
+              <StyledTableCell align="center">{row.contactoObra}</StyledTableCell>
+              <StyledTableCell align="center">{row.ciudad}</StyledTableCell>
+              <StyledTableCell align="center">{row.celContacto}</StyledTableCell>
+              <StyledTableCell align="center">{format(new Date(row.fecha), 'dd/MM/yyyy')}</StyledTableCell>
+              <StyledTableCell align="center">
+                <Stack direction="row" spacing={-3}>
+                  <Button
+                    color="primary"
+                    startIcon={<EditIcon />}
+                    sx={{p:0, fontSize: '0.8rem'}}
+                    onClick={() => {
+                      handleEditar(row.id)
+                      setSelectedObra(row)
+                    }}
+                  />
+                  <Button
+                    color="primary"
+                    sx={{p:0}}
+                    startIcon={<DeleteIcon />}
+                    onClick={handleClickOpen}
+                  />
+                  <DeleteDialog isOpen={open} onClose={handleClose} onEliminar={()=>handleEliminar(row.id)}/>
+                </Stack>
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    
+    </>
+  );
+}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,63 +152,4 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  codObra: number,
-  NomObra: string,
-  NomOficial: string,
-  CelOficial: string,
-  CTOObra: number,
-  Ciudad: string,
-  CELCTO: string,
-  Fecha: string,
-  Acciones: string,
-) {
-  return { codObra, NomObra, NomOficial, CelOficial, CTOObra, Ciudad, CELCTO, Fecha, Acciones };
-}
-
-const rows = [
-  createData(1, "Obra1", "Oficial1", "123456789", 1001, "Ciudad1", "987654321", "2023-01-01", ''),
-  createData(2, "Obra2", "Oficial2", "987654321", 1002, "Ciudad2", "123456789", "2023-02-01", ''),
-  createData(3, "Obra3", "Oficial3", "555555555", 1003, "Ciudad3", "444444444", "2023-03-01", ''),
-  createData(4, "Obra4", "Oficial4", "999999999", 1004, "Ciudad4", "111111111", "2023-04-01", ''),
-  createData(5, "Obra5", "Oficial5", "777777777", 1005, "Ciudad5", "666666666", "2023-05-01", '')
-];
-
-export default function CustomizedTables() {
-  return (
-    <TableContainer component={Paper} sx={{ mt: 0}}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell align="center" sx={{ width: 50 }}>Código de obra</StyledTableCell>
-            <StyledTableCell align="center">Nombre de la obra</StyledTableCell>
-            <StyledTableCell align="center">Nombre del oficial</StyledTableCell>
-            <StyledTableCell align="center">Celular oficial</StyledTableCell>
-            <StyledTableCell align="center">CTO OBRA</StyledTableCell>
-            <StyledTableCell align="center">Ciudad</StyledTableCell>
-            <StyledTableCell align="center">Celular CTO</StyledTableCell>
-            <StyledTableCell align="center">Fecha</StyledTableCell>
-            <StyledTableCell align="center">Acciones</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.codObra}>
-              <StyledTableCell component="th" scope="row">
-                {row.codObra}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.NomObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.NomOficial}</StyledTableCell>
-              <StyledTableCell align="center">{row.CelOficial}</StyledTableCell>
-              <StyledTableCell align="center">{row.CTOObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.Ciudad}</StyledTableCell>
-              <StyledTableCell align="center">{row.CTOObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.Fecha}</StyledTableCell>
-              <StyledTableCell align="center">{row.Acciones}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
+export default ObrasTable;

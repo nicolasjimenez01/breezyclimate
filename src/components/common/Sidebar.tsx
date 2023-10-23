@@ -65,15 +65,15 @@ export default function MultiLevelSidebar() {
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                <Link href='/pedidos/reclamina'>Ductos Rectangular en Lámina</Link>
+                <Link href='/pedidos/crear'>Crear pedido</Link>
               </ListItem>
               <ListItem className="hover:bg-gray-700">
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                <Link href='/pedidos/reclamina'>Ductos Circular en Lámina</Link>
+                <Link href='/pedidos/buscar'>Buscar Pedido</Link>
               </ListItem>
-              <ListItem className="hover:bg-gray-700">
+              {/* <ListItem className="hover:bg-gray-700">
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
@@ -89,8 +89,8 @@ export default function MultiLevelSidebar() {
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                <Link href='/pedidos/reclamina'>Ductos Polisocianorato</Link>
-              </ListItem>
+                <Link href='/pedidos'>Crear Pedido</Link>
+              </ListItem> */}
             </List>
           </AccordionBody>
         </Accordion>
@@ -106,12 +106,12 @@ export default function MultiLevelSidebar() {
           </ListItemPrefix>
           <Link href='/obras'>Obras</Link>
         </ListItem>
-        {/* <ListItem>
+        <ListItem>
           <ListItemPrefix>
             <Cog6ToothIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Settings
-        </ListItem> */}
+          <Link href={'/inventario'}>Inventario</Link>
+        </ListItem>
         <div className="mt-auto p-4">
         <ListItem className="p-0 hover:bg-gray-700">
           <ListItemPrefix>

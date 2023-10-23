@@ -18,7 +18,8 @@ const config: Config = {
       menta: '#3DD9BC',
       mentaHover: '#2CAAA9',
       white: '#fff',
-      grey: '#d4d4d4'
+      grey: '#d4d4d4',
+      darkblue: '#12111F'
     }
   },
   plugins: [],

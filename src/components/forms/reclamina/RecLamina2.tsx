@@ -115,7 +115,7 @@ export default function RecLamina2() {
                     </div>
                   ))}
                 </div>
-                <div>
+                {/* <div>
                     <Link href='/pedidos/reclamina/tabla'>
                       <button
                       className="bg-menta hover:bg-mentaHover text-white color-white font-bold py-2 px-4 rounded w-60 text-xl"
@@ -125,7 +125,7 @@ export default function RecLamina2() {
                       Hacer pedido
                     </button>
                     </Link>
-                </div>
+                </div> */}
               </div>
             </Form>
           )}
