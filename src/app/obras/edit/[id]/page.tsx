@@ -32,7 +32,9 @@ const EditObrasPage = ({params}: Params) => {
   }
 
   return (
-    <EditObrasForm initialValues={initialValues} id={id}/>
+    <div className="flex items-center justify-center h-screen mx-4">
+      <EditObrasForm initialValues={initialValues} id={id}/>
+    </div>
   )
 }
 

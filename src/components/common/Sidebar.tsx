@@ -71,7 +71,7 @@ export default function MultiLevelSidebar() {
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                <Link href='/pedidos/buscar'>Buscar Pedido</Link>
+                <Link href='/pedidos/leer'>Buscar Pedido</Link>
               </ListItem>
               {/* <ListItem className="hover:bg-gray-700">
                 <ListItemPrefix>
@@ -94,12 +94,12 @@ export default function MultiLevelSidebar() {
             </List>
           </AccordionBody>
         </Accordion>
-        <ListItem className="hover:bg-gray-700">
+        {/* <ListItem className="hover:bg-gray-700">
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
           </ListItemPrefix>
           Insumos
-        </ListItem>
+        </ListItem> */}
         <ListItem className="hover:bg-gray-700">
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />

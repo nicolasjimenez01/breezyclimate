@@ -7,31 +7,31 @@ import PedidosCard from '@/components/cards/PedidosCard';
 const ductos = [
   {
     nombre: 'Ductos Rectangular en Lámina',
-    imagen: 'https://mundialdegasyagua.com/wp-content/uploads/2021/06/ducto-4x2.40.jpg',
+    imagen: '/ductoRectangularLamina.png',
     descripcion: 'Descripción del ducto rectangular en lámina.',
     path: '/pedidos/reclamina',
   },
   {
-    nombre: 'Ductos Circular en Lámina',
+    nombre: 'Ductos Circular en Lámina   ',
     imagen: 'https://mundialdegasyagua.com/wp-content/uploads/2021/06/ducto-4x2.40.jpg',
     descripcion: 'Descripción del ducto circular en lámina.',
     path: '/pedidos/reclamina',
   },
   {
     nombre: 'Ductos Lamina con Soldadura',
-    imagen: 'https://mundialdegasyagua.com/wp-content/uploads/2021/06/ducto-4x2.40.jpg',
+    imagen: '/laminaconsoldadura.png',
     descripcion: 'Descripción del ducto de lámina con soldadura.',
     path: '/pedidos/reclamina',
   },
   {
     nombre: 'Ductos Fibra de Vidrio',
-    imagen: 'https://mundialdegasyagua.com/wp-content/uploads/2021/06/ducto-4x2.40.jpg',
+    imagen: '/fibravidrio.png',
     descripcion: 'Descripción del ducto de fibra de vidrio.',
     path: '/pedidos/reclamina',
   },
   {
     nombre: 'Ductos Polisocianorato',
-    imagen: 'https://mundialdegasyagua.com/wp-content/uploads/2021/06/ducto-4x2.40.jpg',
+    imagen: '/polisocianorato.png',
     descripcion: 'Descripción del ducto de polisocianorato.',
     path: '/pedidos/reclamina',
   },

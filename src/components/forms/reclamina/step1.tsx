@@ -48,7 +48,7 @@ export default function Step1() {
               }
             }
             }}
-          value={inputMedidaMayorA || ''}
+            value={inputMedidaMayorA === null ? '' : inputMedidaMayorA}
         />
       
       <Field
@@ -175,7 +175,7 @@ export default function Step1() {
 
       <Field 
         component={TextField}
-        name="drejillasDifusores"
+        name="rejillasDifusores"
         label="Rejillas y Difusores"
         sx={{mt:2, mr: 4}}
         type="number"

@@ -2,18 +2,18 @@ import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import CardWithLink from '../cards';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-mui';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { toast } from 'sonner';
+import { useObrasStore } from '@/context/ObrasContext';
+import { useSearchParams, usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { useCallback } from 'react';
 
 interface Values {
-  codObra: string;
+  codObra: '';
 }
 
 interface Modal {
@@ -36,18 +36,26 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-const codigosDeObra = [
-  '001',
-  '002',
-  '003',
-  '004',
-  '125',
-]
  
 const DialogWithForm = ({ isOpen, onClose }: Modal) => {
 
+  const searchParams = useSearchParams();
+  const pathname = usePathname()
+
+  const [obras, getObras] = useObrasStore(state => [state.obras, state.getObras])
+  const ids = obras.map(obra => obra.id)
+
   const router = useRouter()
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams)
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   const customSvg = (<svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M9.55718 21.5574H4.75717C3.43168 21.5574 2.35717 20.4828 2.35718 19.1574L2.35727 4.75741C2.35728 3.43193 3.43179 2.35742 4.75727 2.35742H15.5575C16.883 2.35742 17.9575 3.43194 17.9575 4.75742V9.55742M6.55755 7.15742H13.7576M6.55755 10.7574H13.7576M6.55755 14.3574H10.1576M13.1574 18.2484L18.2485 13.1573L21.6427 16.5514L16.5515 21.6426H13.1574V18.2484Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -68,18 +76,21 @@ const DialogWithForm = ({ isOpen, onClose }: Modal) => {
     />
   </svg>)
 
-  const handleSubmit = (values: Values, { setSubmitting }: any) => {
+  const handleSubmit = async (values: Values, { setSubmitting }: any) => {
     const codigoIngresado = values.codObra;
-    const codigoExiste = codigosDeObra.includes(codigoIngresado);
-
+    const codigoExiste = ids.includes(Number(codigoIngresado))
     if (codigoExiste) {
-      router.push('/pedidos/crear/reclamina/insertar');
+      await router.push('/pedidos/crear/reclamina/insertar' + '?' + createQueryString('codObra', codigoIngresado));
     } else {
-      toast.error('El código de obra no existe', {position: 'top-center',});
+      toast.error('El código de obra no existe', {position: 'top-right',});
     }
 
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    getObras()
+  },[getObras])
 
  
   return (
@@ -108,13 +119,13 @@ const DialogWithForm = ({ isOpen, onClose }: Modal) => {
               initialValues={{
                 codObra: '',
               }}
-              validate={(values) => {
-                const errors: Partial<Values> = {};
-                if (!values.codObra) {
-                  errors.codObra = 'Required';
-                }
-                return errors;
-              }}
+              // validate={(values) => {
+              //   const errors: Partial<Values> = {};
+              //   if (!values.codObra) {
+              //     errors.codObra = 'Required';
+              //   }
+              //   return errors;
+              // }}
               onSubmit={handleSubmit}
             >
               {({ submitForm, isSubmitting }) => (

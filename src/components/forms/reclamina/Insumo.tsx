@@ -10,6 +10,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '@mui/material';
+import { useInsumosStore } from '@/context/InsumoContext';
 interface Values {
   cantidad: string;
   precio: string;
@@ -22,6 +23,16 @@ interface NeedValues {
 }
 
 const Insumos: React.FC<NeedValues> = ({insumoso, onDelete}: NeedValues) => {
+
+  const [ 
+    selectedPedidoInsumos,
+    setSelectedPedidoInsumo
+  ] = useInsumosStore(state => [
+    state.selectedPedidoInsumos,
+    state.setSelectedPedidoInsumo
+  ])
+
+  
 
   const cantSoportes = useCantSoportes();
   const [inputDistSoportes, _] = useDistSoportes()
@@ -47,6 +58,19 @@ const Insumos: React.FC<NeedValues> = ({insumoso, onDelete}: NeedValues) => {
     // ...otros atributos y funciones necesarios para Formik
   });
 
+  const info = async () => {
+    const newInsumoData = {
+      cantidad: Number(formik.values.cantidad),
+      precio: Number(insumoso.precio),
+      total: Number(formik.values.total),
+      insumoId: Number(insumoso.id),
+    };
+
+    await setSelectedPedidoInsumo(newInsumoData);
+  };
+
+  
+
   useEffect(() => {
     // Realizar cálculos iniciales cuando el componente se renderiza
     if (insumoso.nomInsumo && operacionesPorInsumo[insumoso.nomInsumo]) {
@@ -54,6 +78,10 @@ const Insumos: React.FC<NeedValues> = ({insumoso, onDelete}: NeedValues) => {
     }
     
   }, [insumoso, area, cantPiezas, cantSoportes, inputDistSoportes, promedioMedA, promedioPerimetro, onDelete]);
+
+  useEffect(() => {
+    info()
+  }, [ insumoso.id])
 
   return(
     <Box textAlign="center" p={1} className="border-solid border border-gray-300 mt-3 rounded-md">

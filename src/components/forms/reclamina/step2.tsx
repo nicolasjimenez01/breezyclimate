@@ -8,8 +8,20 @@ import Insumos from './Insumo';
 import { useInsumosStore } from '@/context/InsumoContext';
 import { useEffect } from 'react';
 import { Insumo } from '@prisma/client';
+import { useFormik } from 'formik';
+
 
 export default function Step2() {
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     cantidad: 0,
+  //     precio: 0
+  //   },
+  //   onSubmit: values => {
+
+  //   }
+  // });
 
   const [ 
     insumos,
@@ -29,8 +41,12 @@ export default function Step2() {
     const selectedInsumoName = event.target.value as string;
     const selectedInsumo = insumos.find((insumo) => insumo.nomInsumo === selectedInsumoName);
 
-    if (selectedInsumo) {
-      setSelectedInsumos((prevSelectedInsumos) => [...prevSelectedInsumos, selectedInsumo]);
+    if (!selectedInsumos.includes(selectedInsumo as Insumo)) {
+      setSelectedInsumos((prevSelectedInsumos) => [...prevSelectedInsumos, selectedInsumo as Insumo]);
+    } else {
+      setSelectedInsumos((prevSelected) =>
+        prevSelected.filter((insumo) => insumo !== selectedInsumo)
+      );
     }
   };
 
@@ -46,9 +62,11 @@ export default function Step2() {
               component={Select}
               type="text"
               label="Insumos"
-              name="insumos"
+              name="pedidoInsumos"
               inputProps={{ name: 'Insumos', id: 'insumos' }}
-              onChange={handleTagChange}
+              onChange={(e: any) => {
+                handleTagChange(e);
+              }}
               style={{width:320}}
             >
               {insumos.map((elemento, index) => (

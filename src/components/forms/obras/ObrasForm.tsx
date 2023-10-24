@@ -8,6 +8,7 @@ import { formatRFC3339 } from 'date-fns'
 import { NextResponse } from "next/server";
 import { toast } from 'sonner';
 import { useObrasStore } from '@/context/ObrasContext';
+import { ObraValidation } from '@/utils/validation';
 
 function ObrasForm() {
 
@@ -34,17 +35,7 @@ function ObrasForm() {
         direccion: '',
         fecha: new Date(),
       }}
-      // validate={(values) => {
-      //   const errors: Partial<Values> = {};
-      //   if (!values.email) {
-      //     errors.email = 'Required';
-      //   } else if (
-      //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      //   ) {
-      //     errors.email = 'Invalid email address';
-      //   }
-      //   return errors;
-      // }}
+      validationSchema={ObraValidation}
       onSubmit={async (e, { setSubmitting }) => {
         try {
           const fechaFormat = formatRFC3339(new Date(e.fecha), { fractionDigits: 3 })

@@ -3,6 +3,13 @@ import { Insumo } from "@prisma/client"
 import { create } from "zustand"
 import { UpdateInsumo } from "@/interfaces/Obra"
 
+interface PedidoInsumo {
+  cantidad: number,
+  precio: number,
+  total: number
+  insumoId: number
+}
+
 interface InsumosStore {
   insumos: Insumo[];
   selectedInsumo: Insumo | null;
@@ -10,11 +17,17 @@ interface InsumosStore {
   updateInsumo: (id: number, insumo: UpdateInsumo) => Promise<void>;
   setSelectedInsumo: (insumo: Insumo | null) => void;
   findInsumo: (id: number) => Promise<Insumo>;
+  selectedInsumos: Insumo[] 
+  setSelectedInsumos: (insumo: Insumo ) => void
+  selectedPedidoInsumos: PedidoInsumo[]
+  setSelectedPedidoInsumo: (pedidoInsumo: PedidoInsumo) => void
 }
 
 export const useInsumosStore = create<InsumosStore>((set) => ({
   insumos: [],
   selectedInsumo: null,
+  selectedInsumos: [],
+  selectedPedidoInsumos: [],
 
   getInsumos: async () => {
     const res = await fetch('/api/insumos')
@@ -22,6 +35,14 @@ export const useInsumosStore = create<InsumosStore>((set) => ({
     set({ insumos })
   },
 
+  setSelectedPedidoInsumo: (pedidoInsumo) => set((state) => ({
+    selectedPedidoInsumos: [ ...state.selectedPedidoInsumos, pedidoInsumo]
+  })),
+
+  setSelectedInsumos: (insumo) => set((state) => ({
+    selectedInsumos: [...state.selectedInsumos, insumo],
+  })),
+  
   setSelectedInsumo: (insumo) => set({ selectedInsumo: insumo}),
 
   updateInsumo: async (id, insumo) => {

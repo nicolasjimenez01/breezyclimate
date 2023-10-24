@@ -6,6 +6,28 @@ interface Params {
   params: { id: string }
 }
 
+export async function GET(request: NextRequest, { params }: Params){
+  try {
+    const pedido = await prisma.pedidoInsumo.findUnique({
+      where: {
+        id: Number(params.id)
+      }
+    })
+
+    if(!pedido) return NextResponse.json({ message: 'PedidoInsumo not found'})
+    
+    return NextResponse.json(pedido)
+  } catch (error) {
+    if(error instanceof Error){
+      return NextResponse.json({
+        message: error.message
+      }, {
+        status: 500
+      })
+    }
+  }
+}
+
 export async function DELETE(request: NextRequest, { params }: Params){
   try {
     const deletedPedido = await prisma.pedidoInsumo.delete({

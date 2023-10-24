@@ -6,7 +6,8 @@ import { CreatePedido } from "@/interfaces/Obra"
 interface PedidosStore {
   pedidos: PedidoRecLamina[]
   getPedidos: () => Promise<void>
-  createPedido: (pedido: CreatePedido) => Promise<void>
+  createPedido: (pedido: CreatePedido) => Promise<PedidoRecLamina>
+  deletePedido: (id: number) => Promise<void>;
 }
 
 
@@ -29,5 +30,13 @@ export const usePedidosStore = create<PedidosStore>((set) => ({
     })
     const createdPedido = await res.json()
     set((state) => ({ pedidos: [...state.pedidos, createdPedido]}))
+    return createdPedido
+  },
+
+  deletePedido: async (id) => {
+    await fetch(`http://localhost:3000/api/pedidos/${id}`, {
+      method: 'DELETE',
+    });
+    set((state) => ({ pedidos: state.pedidos.filter((pedido) => pedido.id !== id) }));
   }
 }))

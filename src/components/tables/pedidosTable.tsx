@@ -8,6 +8,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useEffect } from 'react';
+import { useObrasStore } from '@/context/ObrasContext';
+import { format } from 'date-fns'
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteDialog from "@/components/modal/ConfirmDelete";
+import { usePedidosStore } from '@/context/PedidosContext';
+import { toast } from 'sonner';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,59 +39,87 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  codObra: number,
-  NomObra: string,
-  NomOficial: string,
-  CelOficial: string,
-  CTOObra: number,
-  Ciudad: string,
-  CELCTO: string,
-  Fecha: string,
-  Acciones: string,
-) {
-  return { codObra, NomObra, NomOficial, CelOficial, CTOObra, Ciudad, CELCTO, Fecha, Acciones };
-}
-
-const rows = [
-  createData(1, "Obra1", "Oficial1", "123456789", 1001, "Ciudad1", "987654321", "2023-01-01", ''),
-  createData(2, "Obra2", "Oficial2", "987654321", 1002, "Ciudad2", "123456789", "2023-02-01", ''),
-  createData(3, "Obra3", "Oficial3", "555555555", 1003, "Ciudad3", "444444444", "2023-03-01", ''),
-  createData(4, "Obra4", "Oficial4", "999999999", 1004, "Ciudad4", "111111111", "2023-04-01", ''),
-  createData(5, "Obra5", "Oficial5", "777777777", 1005, "Ciudad5", "666666666", "2023-05-01", '')
-];
 
 export default function PedidosTable() {
+
+  const deletePedido = usePedidosStore((state) => state.deletePedido)
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleEliminar = async (id: number) => {
+    await deletePedido(id)
+    toast.success('Se ha eliminado la el pedido correctamente')
+    handleClose()
+  };
+
+  const [
+    obras,
+    getObras
+   ] = useObrasStore((state) => [
+    state.obras,
+    state.getObras
+   ])
+
+  const [
+    pedidos,
+    getPedidos
+   ] = usePedidosStore((state) => [
+    state.pedidos,
+    state.getPedidos
+   ])
+
+
+   useEffect(() => {
+    getPedidos()
+   },[getPedidos])
+
+
   return (
     <TableContainer component={Paper} sx={{ mt: 0}}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <StyledTableCell align="center" sx={{ width: 50 }}>Código de obra</StyledTableCell>
-            <StyledTableCell align="center">Nombre de la obra</StyledTableCell>
-            <StyledTableCell align="center">Nombre del oficial</StyledTableCell>
-            <StyledTableCell align="center">Celular oficial</StyledTableCell>
-            <StyledTableCell align="center">CTO OBRA</StyledTableCell>
             <StyledTableCell align="center">Ciudad</StyledTableCell>
-            <StyledTableCell align="center">Celular CTO</StyledTableCell>
+            <StyledTableCell align="center">ID Obra</StyledTableCell>
+            <StyledTableCell align="center">Dirección</StyledTableCell>
             <StyledTableCell align="center">Fecha</StyledTableCell>
+            <StyledTableCell align="center">Longitud Soportes</StyledTableCell>
+            <StyledTableCell align="center">Longitud Ductos</StyledTableCell>
+            <StyledTableCell align="center">Perimetro</StyledTableCell>
             <StyledTableCell align="center">Acciones</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.codObra}>
-              <StyledTableCell component="th" scope="row">
-                {row.codObra}
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.NomObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.NomOficial}</StyledTableCell>
-              <StyledTableCell align="center">{row.CelOficial}</StyledTableCell>
-              <StyledTableCell align="center">{row.CTOObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.Ciudad}</StyledTableCell>
-              <StyledTableCell align="center">{row.CTOObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.Fecha}</StyledTableCell>
-              <StyledTableCell align="center">{row.Acciones}</StyledTableCell>
+          {pedidos.map((row) => (
+            <StyledTableRow key={row.id}>
+            <StyledTableCell component="th" scope="row">
+              {row.id}
+            </StyledTableCell>
+            <StyledTableCell align="center">{row.ciudad}</StyledTableCell>
+            <StyledTableCell align="center">{row.obraId}</StyledTableCell>
+            <StyledTableCell align="center">{row.direccion}</StyledTableCell>
+            <StyledTableCell align="center">{format(new Date(row.fecha), 'dd/MM/yyyy')}</StyledTableCell>
+            <StyledTableCell align="center">{row.longSoportes}</StyledTableCell>
+            <StyledTableCell align="center">{row.longitudDuctos}</StyledTableCell>
+            <StyledTableCell align="center">{row.perimetro}</StyledTableCell>
+            <StyledTableCell align="center">
+              <Button
+                color="primary"
+                sx={{p:0}}
+                startIcon={<DeleteIcon />}
+                onClick={handleClickOpen}
+              />
+              <DeleteDialog isOpen={open} onClose={handleClose} onEliminar={()=>handleEliminar(row.id)}/>
+            </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
