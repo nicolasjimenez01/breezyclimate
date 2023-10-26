@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import PedidosCard from '@/components/cards/PedidosCard';
 
-const ductos = [
+export const ductos = [
   {
     nombre: 'Ductos Rectangular en Lámina',
     imagen: '/ductoRectangularLamina.png',
@@ -13,7 +13,7 @@ const ductos = [
   },
   {
     nombre: 'Ductos Circular en Lámina   ',
-    imagen: 'https://mundialdegasyagua.com/wp-content/uploads/2021/06/ducto-4x2.40.jpg',
+    imagen: '/circular.jpg',
     descripcion: 'Descripción del ducto circular en lámina.',
     path: '/pedidos/reclamina',
   },
