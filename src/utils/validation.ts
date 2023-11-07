@@ -15,6 +15,8 @@ export const ObraValidation = Yup.object().shape({
 export const RegisterUserValidation = Yup.object().shape({
   email: Yup.string().email('Tiene que ser un email válido').required('Required'),
   username: Yup.string().min(2, 'Demasiado corto').max(30, 'Too Long!').required('Required'),
-  rol: Yup.string().required(),
-  idNumber: Yup.number().typeError("Ingresa solo números").required()
+  idNumber: Yup.number().typeError("Ingresa solo números").required(),
+  nombre: Yup.string().min(2, 'Muy corto').max(26, 'Demasiado largo').required(),
+  edad: Yup.number().typeError("Ingresa solo números").required(),
+  celular: Yup.number().typeError("Ingresa solo números").required(),
 })

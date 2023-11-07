@@ -8,7 +8,7 @@ const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { laber: "Username", type: "text", placeholder: "user"},
+        username: { label: "Username", type: "text", placeholder: "user"},
         password: { label: "Password", type: "password", placeholder: "*****"}
       },
       async authorize(credentials, req) {
@@ -30,7 +30,7 @@ const authOptions = {
           name: userFound.username,
           email: userFound.email,
         }
-      }
+      },
     })
   ],
   // pages: {

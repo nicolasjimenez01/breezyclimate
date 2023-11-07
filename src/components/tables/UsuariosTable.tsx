@@ -19,30 +19,26 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Obra } from '@prisma/client';
 import { format } from 'date-fns'
+import { useUserStore } from '@/context/UserContext';
 
 
-async function findObra(id: number): Promise<Obra>{
-  const res = await fetch('http://localhost:3000/api/obras/' + id)
-  const obra: Obra = await res.json()
-  return obra
-}
-
-function ObrasTable() {
+function UsersTable() {
 
   const [
-    obras, 
-    getObras, 
-    deleteObra, 
-    setSelectedObra
-  ] = useObrasStore(state => [
-    state.obras,
-    state.getObras,
-    state.deleteObra,
-    state.setSelectedObra
+    users,
+    getUsers,
+    deleteUser,
+    setSelectedUser,
+    findUser
+  ] = useUserStore(state => [
+    state.users,
+    state.getUsers,
+    state.deleteUser,
+    state.setSelectedUser,
+    state.findUser
   ])
-
   const [open, setOpen] = React.useState(false);
-  const [obra, setObra] = React.useState<Obra | undefined>(undefined);
+  // const [obra, setObra] = React.useState<Obra | undefined>(undefined);
 
   const router = useRouter()
 
@@ -55,21 +51,21 @@ function ObrasTable() {
   };
 
   const handleEliminar = async (id: number) => {
-    await deleteObra(id)
-    toast.success('Se ha eliminado la obra correctamente')
+    await deleteUser(id)
+    toast.success('Se ha eliminado el usuario correctamente')
     handleClose()
   };
 
   const handleEditar = async (id: number) => {
-    const obraData = await findObra(id)
-    setObra(obraData);
-    router.push( `/obras/edit/${id}`);
+    const userData = await findUser(id)
+    // setObra(obraData);
+    router.push( `/users/edit/${id}`);
   };
 
 
   useEffect(() => {
-    getObras()
-  }, [getObras])
+    getUsers()
+  }, [getUsers])
   
   return (
     <>
@@ -77,30 +73,28 @@ function ObrasTable() {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center" sx={{ width: 50 }}>Código de obra</StyledTableCell>
-            <StyledTableCell align="center">Nombre de la obra</StyledTableCell>
-            <StyledTableCell align="center">Nombre del oficial</StyledTableCell>
-            <StyledTableCell align="center">Celular oficial</StyledTableCell>
-            <StyledTableCell align="center">CTO OBRA</StyledTableCell>
-            <StyledTableCell align="center">Ciudad</StyledTableCell>
-            <StyledTableCell align="center">Celular CTO</StyledTableCell>
-            <StyledTableCell align="center">Fecha</StyledTableCell>
+            <StyledTableCell align="center" sx={{ width: 50 }}>Id</StyledTableCell>
+            <StyledTableCell align="center">Nombre</StyledTableCell>
+            <StyledTableCell align="center">Celular</StyledTableCell>
+            <StyledTableCell align="center">Cédula</StyledTableCell>
+            <StyledTableCell align="center">Username</StyledTableCell>
+            <StyledTableCell align="center">Edad</StyledTableCell>
+            <StyledTableCell align="center">Email</StyledTableCell>
             <StyledTableCell align="center">Acciones</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {obras.map((row) => (
+          {users.map((row) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row">
                 {row.id}
               </StyledTableCell>
-              <StyledTableCell align="center">{row.nomObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.nomOficial}</StyledTableCell>
-              <StyledTableCell align="center">{row.celOficial}</StyledTableCell>
-              <StyledTableCell align="center">{row.contactoObra}</StyledTableCell>
-              <StyledTableCell align="center">{row.ciudad}</StyledTableCell>
-              <StyledTableCell align="center">{row.celContacto}</StyledTableCell>
-              <StyledTableCell align="center">{format(new Date(row.fecha), 'dd/MM/yyyy')}</StyledTableCell>
+              <StyledTableCell align="center">{row.nombre}</StyledTableCell>
+              <StyledTableCell align="center">{row.celular}</StyledTableCell>
+              <StyledTableCell align="center">{row.idNumber}</StyledTableCell>
+              <StyledTableCell align="center">{row.username}</StyledTableCell>
+              <StyledTableCell align="center">{row.edad}</StyledTableCell>
+              <StyledTableCell align="center">{row.email}</StyledTableCell>
               <StyledTableCell align="center">
                 <Stack direction="row" spacing={-3}>
                   <Button
@@ -109,7 +103,8 @@ function ObrasTable() {
                     sx={{p:0, fontSize: '0.8rem'}}
                     onClick={() => {
                       handleEditar(row.id)
-                      setSelectedObra(row)
+                      setSelectedUser(row)
+                      console.log(setSelectedUser(row))
                     }}
                   />
                   <Button
@@ -118,7 +113,7 @@ function ObrasTable() {
                     startIcon={<DeleteIcon />}
                     onClick={handleClickOpen}
                   />
-                  <DeleteDialog isOpen={open} onClose={handleClose} onEliminar={()=>handleEliminar(row.id)} mensaje='Esta obra se elimiará'/>
+                  <DeleteDialog isOpen={open} onClose={handleClose} onEliminar={()=>handleEliminar(row.id)} mensaje='Este usuario se eliminará'/>
                 </Stack>
               </StyledTableCell>
             </StyledTableRow>
@@ -152,4 +147,4 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default ObrasTable;
+export default UsersTable;

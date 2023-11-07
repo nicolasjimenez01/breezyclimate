@@ -10,9 +10,10 @@ interface Modal {
   isOpen: boolean
   onClose: () => void;
   onEliminar: () => void;
+  mensaje: string
 }
 
-export default function DeleteDialog({ isOpen, onClose, onEliminar }: Modal) {
+export default function DeleteDialog({ isOpen, onClose, onEliminar, mensaje }: Modal) {
 
   return (
     <div>
@@ -27,7 +28,7 @@ export default function DeleteDialog({ isOpen, onClose, onEliminar }: Modal) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Esta obra se elimiará
+            {mensaje}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

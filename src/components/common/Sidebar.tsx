@@ -1,4 +1,6 @@
 'use client'
+
+import { signOut } from "next-auth/react";
 import { useState } from "react";
 import {
   Card,
@@ -23,6 +25,7 @@ import {
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@mui/material";
  
 export default function MultiLevelSidebar() {
   const [open, setOpen] = useState(0);
@@ -94,12 +97,6 @@ export default function MultiLevelSidebar() {
             </List>
           </AccordionBody>
         </Accordion>
-        {/* <ListItem className="hover:bg-gray-700">
-          <ListItemPrefix>
-            <InboxIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Insumos
-        </ListItem> */}
         <ListItem className="hover:bg-gray-700">
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
@@ -112,12 +109,24 @@ export default function MultiLevelSidebar() {
           </ListItemPrefix>
           <Link href={'/inventario'}>Inventario</Link>
         </ListItem>
+        <ListItem className="hover:bg-gray-700">
+          <ListItemPrefix>
+            <InboxIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          {/* <Link href='/auth/register'>Registrar</Link> */}
+          <Link href='/users'>Usarios</Link>
+        </ListItem>
         <div className="mt-auto p-4">
         <ListItem className="p-0 hover:bg-gray-700">
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Log Out
+          <Button 
+          onClick={() => signOut()}
+          className="bg-blue-500 text-white font-semibold text-lg py-2 rounded capitalize"
+          >
+            Log Out
+          </Button>
         </ListItem>
         </div>
       </List>

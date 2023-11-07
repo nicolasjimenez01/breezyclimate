@@ -25,3 +25,4 @@ export type CreatePedidoInsumos = Omit<PedidoInsumo, 'id' | 'createdAt' | 'updat
 
 
 export type CreateUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>
+export type UpdateUser = Partial<CreateUser>

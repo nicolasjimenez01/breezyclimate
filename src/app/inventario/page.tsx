@@ -11,10 +11,7 @@ const allowedRoles = [
 export default function InventarioPage() {
   return (
     <>
-      <div className="mx-10 flex flex-col justify-center items-center h-screen mb-10">
-        <div className="mt-10">
-          <SearchBox/>
-        </div>
+      <div className="mx-10 flex flex-col justify-center items-center h-screen mb-10 mt-10">
         <InventarioTable/>
       </div>
     </>

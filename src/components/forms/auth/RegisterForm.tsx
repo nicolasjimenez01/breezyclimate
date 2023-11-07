@@ -5,13 +5,15 @@ import { TextField, Select } from 'formik-mui';
 import  React from 'react';
 import { NextResponse } from "next/server";
 import { RegisterUserValidation } from '@/utils/validation';
-import { Role } from '@prisma/client';
 import MenuItem from '@mui/material/MenuItem';
 import { useUserStore } from '@/context/UserContext';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useFormikContext } from 'formik';
 
 function RegisterForm() {
+
+  const formik = useFormikContext();
 
   const router = useRouter()
 
@@ -25,24 +27,29 @@ function RegisterForm() {
     <Formik
       initialValues={{
         email: '',
+        nombre: '',
         username: '',
-        rol: '',
+        edad: '',
         password: '',
-        idNumber: ''
+        idNumber: '',
+        celular: ''
       }}
       validationSchema={RegisterUserValidation}
       onSubmit={async (e, { setSubmitting }) => {
         try {
           const newUser = await createUser({
             ...e,
-            rol: e.rol as Role,
             idNumber: Number(e.idNumber),
-            password: e.idNumber
+            password: e.idNumber,
+            celular: Number(e.celular),
+            edad: Number(e.edad),
+            nombre: e.nombre,
+            email: e.email
           })
           toast.success('Usuario creado');
           await new Promise((resolve) => setTimeout(resolve, 2000))
           if(newUser){
-            router.push('/')
+            router.push('/users')
           }
         } catch (error) {
           if(error instanceof Error){
@@ -57,75 +64,81 @@ function RegisterForm() {
         }
       }}
     >
-      {({ submitForm, isSubmitting }) => (
+      {({ submitForm, isSubmitting, values }) => (
         <Form>
           <div className='flex items-center justify-center mb-4'>
             <h2 className='font-bold text-4xl'>
               Register
             </h2>
           </div>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <label htmlFor='username'>Username</label>
+
             <Field
               component={TextField}
-              id="username"
-              name="username"
-              placeholder="usuario"
+              name="email"
+              placeholder="usuario@mail.com"
+              label="Correo"
+              type="email"
+              sx={{mt:2, mr:4}}
               style={{width:320}}
             />
-          
 
-          <br/>
-          
-          <label htmlFor="email">Email</label>
-          <Field
-            component={TextField}
-            name="email"
-            placeholder="usuario@mail.com"
-            type="email"
-            id="email"
-            style={{width:320}}
-          />
-          
 
-          <br/>
-
-          <label htmlFor="rol">Rol</label>
-          <Field
-              component={Select}
+            <Field
+              component={TextField}
               type="text"
-              id="rol"
-              name="rol"
-              // inputProps={{ name: 'Rol', id: 'rol' }}
-              // onChange={}
+              label="Nombre"
+              name="nombre"
+              placeholder="Juanito"
+              sx={{mt:2}}
               style={{width:320}}
-              // placeholder="OFICIAL"
-            >
-              {Object.values(Role).map((role, index) => (
-                <MenuItem key={index} value={role}>
-                  {role}
-                </MenuItem>
-              ))}
-          </Field>
+            />
+
+            <br/>
+
+            <Field
+              component={TextField}
+              type="text"
+              label="Cedula"
+              name="idNumber"
+              placeholder="123456"
+              sx={{mt:2, mr:4}}
+              style={{width:320}}
+            />
+
+            <Field
+              component={TextField}
+              label="Username"
+              name="username"
+              placeholder="usuario"
+              sx={{mt:2}}
+              style={{width:320}}
+            />
+            <br/>
+
+            <Field
+              component={TextField}
+              label="Edad"
+              name="edad"
+              placeholder="XX"
+              sx={{mt:2, mr:4}}
+              style={{width:320}}
+            />
+
+            <Field
+              component={TextField}
+              label="Celular"
+              name="celular"
+              placeholder="12345"
+              sx={{mt:2}}
+              style={{width:320}}
+            />
+
 
           <br/>
 
-          <label htmlFor="idNumber">Cedula</label>
-          <Field
-            component={TextField}
-            type="text"
-            id="idNumber"
-            name="idNumber"
-            placeholder="123456"
-            style={{width:320}}
-          />
-
-          </Box>
-
-          <br/>
-
-          {isSubmitting && <LinearProgress />}
-
+          <div className='mt-2'>
+            {isSubmitting && <LinearProgress />}
+          </div>
           
           <br />
                   

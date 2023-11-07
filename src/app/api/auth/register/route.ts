@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
-    const { username, email, password, rol, idNumber } = data
+    const { email, nombre, username, edad, password, idNumber, celular } = data
   
     const emailFound = await prisma.user.findUnique({
       where: {
@@ -57,7 +57,9 @@ export async function POST(request: NextRequest) {
         username,
         email,
         password: hashPassword,
-        rol,
+        nombre,
+        edad,
+        celular,
         idNumber
       }
     })
@@ -75,3 +77,19 @@ export async function POST(request: NextRequest) {
     }
   }
 }
+
+export async function GET(){
+  try {
+    const usuarios = await prisma.user.findMany()
+    return NextResponse.json(usuarios)
+  } catch (error) {
+    if(error instanceof Error){
+      return NextResponse.json({
+        message: error.message
+      }, {
+        status: 500
+      })
+    }
+  }
+}
+

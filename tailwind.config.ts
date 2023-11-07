@@ -19,7 +19,8 @@ const config: Config = {
       mentaHover: '#2CAAA9',
       white: '#fff',
       grey: '#d4d4d4',
-      darkblue: '#12111F'
+      darkblue: '#12111F',
+      black: '#000'
     }
   },
   plugins: [],
