@@ -11,3 +11,10 @@ export const ObraValidation = Yup.object().shape({
   ciudad: Yup.string().min(4, 'Too Short!').max(50, 'Too Long!').required('Required'),
   direccion: Yup.string().min(4, 'Too Short!').max(50, 'Too Long!').required('Required'),
 });
+
+export const RegisterUserValidation = Yup.object().shape({
+  email: Yup.string().email('Tiene que ser un email válido').required('Required'),
+  username: Yup.string().min(2, 'Demasiado corto').max(30, 'Too Long!').required('Required'),
+  rol: Yup.string().required(),
+  idNumber: Yup.number().typeError("Ingresa solo números").required()
+})

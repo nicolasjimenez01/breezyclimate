@@ -8,7 +8,7 @@ interface Params {
 
 export async function GET(request: NextRequest, { params }: Params){
   try {
-    const pedido = await prisma.pedidoRecLamina.findUnique({
+    const pedido = await prisma.pedido.findUnique({
       where: {
         id: Number(params.id)
       }
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: Params){
 
 export async function DELETE(request: NextRequest, { params }: Params){
   try {
-    const deletedPedido = await prisma.pedidoRecLamina.delete({
+    const deletedPedido = await prisma.pedido.delete({
       where: {
         id: Number(params.id)
       }

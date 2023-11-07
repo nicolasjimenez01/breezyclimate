@@ -1,12 +1,12 @@
 'use client'
-import { PedidoRecLamina } from "@prisma/client"
+import { Pedido } from "@prisma/client"
 import { create } from "zustand"
 import { CreatePedido } from "@/interfaces/Obra"
 
 interface PedidosStore {
-  pedidos: PedidoRecLamina[]
+  pedidos: Pedido[]
   getPedidos: () => Promise<void>
-  createPedido: (pedido: CreatePedido) => Promise<PedidoRecLamina>
+  createPedido: (pedido: CreatePedido) => Promise<Pedido>
   deletePedido: (id: number) => Promise<void>;
 }
 

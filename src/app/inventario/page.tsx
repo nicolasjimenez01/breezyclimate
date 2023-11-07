@@ -2,6 +2,11 @@
 import SearchBox from "@/components/common/Search"
 import InventarioTable from "@/components/tables/InventarioTable"
 
+const allowedRoles = [
+  'ALMACENISTA',
+  'ADMINISTRADOR'
+]
+
 
 export default function InventarioPage() {
   return (

@@ -1,6 +1,6 @@
 
 
-import { Obra, PedidoInsumo, PedidoRecLamina } from "@prisma/client"
+import { Obra, PedidoInsumo, Pedido, User } from "@prisma/client"
 import { Insumo } from "@prisma/client"
 
 
@@ -17,8 +17,11 @@ export type UpdateInsumo = Partial<CreateInsumo>
 
 
 
-export type CreatePedido = Omit<PedidoRecLamina, 'id' | 'createdAt' | 'updatedAt'>
+export type CreatePedido = Omit<Pedido, 'id' | 'createdAt' | 'updatedAt'>
 
 
 
 export type CreatePedidoInsumos = Omit<PedidoInsumo, 'id' | 'createdAt' | 'updatedAt' >
+
+
+export type CreateUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>

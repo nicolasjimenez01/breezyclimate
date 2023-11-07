@@ -26,7 +26,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl" sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end', background: '#12111F'}}>
+      <Container maxWidth="2xl" sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end', background: '#12111F'}}>
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1 }}>
             <Tooltip title="Open settings">

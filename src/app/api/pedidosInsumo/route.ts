@@ -45,6 +45,15 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function DELETE() {
+  try {
+    const deletedPedidos = await prisma.pedidoInsumo.deleteMany()
+    return NextResponse.json(deletedPedidos)
+  } catch (error) {
+    
+  }
+}
+
 // export async function POST(request: Request){
 //   try{
 //     const {  

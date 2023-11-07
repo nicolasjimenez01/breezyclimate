@@ -3,7 +3,7 @@ import { prisma } from "@/libs/prisma";
 
 export async function GET(){
   try{
-    const pedidos = await prisma.pedidoRecLamina.findMany()
+    const pedidos = await prisma.pedido.findMany()
     return NextResponse.json(pedidos)
   } catch(error) {
     if(error instanceof Error){
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       obraId,
       pedidoInsumos
     } = await request.json()
-    const nuevoPedido = await prisma.pedidoRecLamina.create({
+    const nuevoPedido = await prisma.pedido.create({
       data: {
         medidaMayorA,
         medidaMenorA,
@@ -72,5 +72,14 @@ export async function POST(request: NextRequest) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 500 });
     }
+  }
+}
+
+export async function DELETE() {
+  try {
+    const deletedPedidos = await prisma.pedido.deleteMany()
+    return NextResponse.json(deletedPedidos)
+  } catch (error) {
+    
   }
 }

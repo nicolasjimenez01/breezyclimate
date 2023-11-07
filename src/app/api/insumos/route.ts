@@ -17,34 +17,34 @@ export async function GET(){
   }
 }
 
-// export async function POST(request: Request) {
-//   try {
-//     const insumos = await request.json();
+export async function POST(request: Request) {
+  try {
+    const insumos = await request.json();
 
-//     // Verifica si la solicitud contiene un array de insumos
-//     if (!Array.isArray(insumos)) {
-//       throw new Error('Se espera un array de insumos en la solicitud.');
-//     }
+    // Verifica si la solicitud contiene un array de insumos
+    if (!Array.isArray(insumos)) {
+      throw new Error('Se espera un array de insumos en la solicitud.');
+    }
 
-//     // Crea los insumos en la base de datos
-//     const nuevosInsumos = await prisma.insumo.createMany({
-//       data: insumos,
-//     });
+    // Crea los insumos en la base de datos
+    const nuevosInsumos = await prisma.insumo.createMany({
+      data: insumos,
+    });
 
-//     return NextResponse.json(nuevosInsumos);
-//   } catch (error) {
-//     if (error instanceof Error) {
-//       return NextResponse.json(
-//         {
-//           message: error.message,
-//         },
-//         {
-//           status: 500,
-//         }
-//       );
-//     }
-//   }
-// }
+    return NextResponse.json(nuevosInsumos);
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          message: error.message,
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+  }
+}
 
 // export async function POST(request: Request){
 //   try {
